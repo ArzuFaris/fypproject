@@ -19,6 +19,6 @@ class Milestone extends Model
 
     public function grantproject()
     {
-        return $this->belongsTo(GrantProject::class);
+        return $this->belongsTo(GrantProject::class, 'project_id');
     }
 }
