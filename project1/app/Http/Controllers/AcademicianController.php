@@ -15,8 +15,8 @@ class AcademicianController extends Controller
     public function index()
     {
         //$academicians = Academician::all();
-        $academician = Academician::paginate(10);
-        return view('academicians.index', compact ('academicians'));
+        $academicians = Academician::paginate(10);
+        return view('academicians.index', compact('academicians'));
     }
 
     /**
@@ -24,7 +24,7 @@ class AcademicianController extends Controller
      */
     public function create()
     {
-        return view('academician.create');
+        return view('academicians.create');
     }
 
     /**
