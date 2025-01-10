@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Milestone extends Model
 {
     protected $fillable = [
-        'milestone_id',
         'project_id',
         'name',
         'target_completion_date',
@@ -17,8 +16,8 @@ class Milestone extends Model
         'last_updated'
     ];
 
-    public function grantproject()
+    public function project()
     {
-        return $this->belongsTo(GrantProject::class, 'project_id');
+        return $this->belongsTo(GrantProject::class);
     }
 }

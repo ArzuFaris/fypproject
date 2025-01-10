@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademicianController;
-use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\GrantProjectController;
 use App\Http\Controllers\MilestoneController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\Auth\LoginController;
@@ -12,7 +12,7 @@ Route::get('/', function () {
 });
 
 Route::resource('/academicians',\App\Http\Controllers\AcademicianController::class);
-Route::resource('/grantprojects',\App\Http\Controllers\GrantProjectController::class);
+Route::resource('/grant-projects', GrantProjectController::class);
 Route::resource('/milestones',\App\Http\Controllers\MilestoneController::class);
 //Route::resource('/staffs',\App\Http\Controllers\StaffController::class);
 //Auth::routes();

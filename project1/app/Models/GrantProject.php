@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class GrantProject extends Model
 {
+    protected $table = 'grant_projects';
+
+    protected $primaryKey = 'project_id';
+    
     protected $fillable = [
         'project_id',
         'academician_id',
@@ -16,12 +20,18 @@ class GrantProject extends Model
         'duration'
     ];
 
-    public function academicians(){
+    public function projectLeader()
+    {
         return $this->belongsTo(Academician::class, 'academician_id');
     }
 
     public function milestones()
     {
-        return $this->hasMany(Milestone::class, 'project_id');
+        return $this->hasMany(Milestone::class);
+    }
+
+    public function members()
+    {
+        return $this->hasMany(ProjectMember::class, 'project_id');
     }
 }

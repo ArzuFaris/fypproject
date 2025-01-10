@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GrantProject;
+use App\Models\Academician;
 use Illuminate\Http\Request;
 
 class GrantProjectController extends Controller
@@ -13,8 +14,11 @@ class GrantProjectController extends Controller
     public function index()
     {
         //$grantprojects = Project::with(['leader', 'members'])->paginate(10);
-        $grantProjects = GrantProject::paginate(10);
-        return view('grantprojects.index', compact('grantproject'));
+        $grantprojects = GrantProject::paginate(10);
+        //return view('grantprojects.index', compact('grantproject'));
+        //return view('grant-projects.index', compact('grantprojects'));
+        $projects = GrantProject::with('projectLeader')->get();
+        return view('grant-projects.index', compact('grantprojects'));
     }
 
     /**
@@ -22,8 +26,8 @@ class GrantProjectController extends Controller
      */
     public function create()
     {
-        //$academicians = Academician::all();
-        return view('grantprojects.create', compact('academician'));
+        $academicians = Academician::all();
+        return view('grant-projects.create', compact('academicians'));
     }
 
     /**
@@ -32,7 +36,7 @@ class GrantProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            //'academician_id' => 'required',
+            'academician_id' => 'required',
             'project_id' => 'required|string|unique:grantprojects',
             'title' => 'required|string|max:255',
             'grant_amount' => 'required|numeric|min:0',
@@ -41,10 +45,10 @@ class GrantProjectController extends Controller
             'duration' => 'required|string|max:255',
         ]);
 
-        $project = GrantProject::create($validated);
+        $grantProject = GrantProject::create($validated);
         //$project->members()->attach($request->members);
 
-        return redirect()->route('grantprojects.index')
+        return redirect()->route('grant-projects.index')
             ->with('success', 'Grant project created successfully');
     }
 
@@ -53,7 +57,8 @@ class GrantProjectController extends Controller
      */
     public function show(GrantProject $grantProject)
     {
-        return view('grantprojects.show', compact('academician'));
+        //$grantProject->load('projectLeader', 'members', 'milestones');
+        return view('grant-projects.show', compact('grantProject'));
     }
 
     /**
@@ -61,8 +66,8 @@ class GrantProjectController extends Controller
      */
     public function edit(GrantProject $grantProject)
     {
-        //$academicians = Academician::all();
-        return view('grantprojects.edit', compact('grantproject'));
+        $academicians = Academician::all();
+        return view('grant-projects.edit', compact('grantProject', 'academicians'));
     }
 
     /**
@@ -71,7 +76,7 @@ class GrantProjectController extends Controller
     public function update(Request $request, GrantProject $grantProject)
     {
         $validated = $request->validate([
-            //'academician_id' => 'required',
+            'academician_id' => 'required',
             'project_id' => 'required|string|unique:grantprojects',
             'title' => 'required|string|max:255',
             'grant_amount' => 'required|numeric|min:0',
@@ -83,7 +88,7 @@ class GrantProjectController extends Controller
         $grantProject->update($validated);
         //$project->members()->sync($request->members);
 
-        return redirect()->route('grantprojects.index')
+        return redirect()->route('grant-projects.index')
             ->with('success', 'Grant project updated successfully');
     }
 
@@ -93,7 +98,7 @@ class GrantProjectController extends Controller
     public function destroy(GrantProject $grantProject)
     {
         $grantProject->delete();
-        return redirect()->route('grantprojects.index')
+        return redirect()->route('grant-projects.index')
             ->with('success', 'Grant project deleted successfully');
     }
 }

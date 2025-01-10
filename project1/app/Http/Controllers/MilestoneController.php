@@ -14,7 +14,7 @@ class MilestoneController extends Controller
     public function index()
     {
         $milestones = Milestone::latest()->orderby('target_completion_date')->paginate(10);
-        return view('milestones.index', compact('project', 'milestones'));
+        return view('milestones.index', compact('milestones'));
     }
 
     /**
@@ -22,7 +22,7 @@ class MilestoneController extends Controller
      */
     public function create()
     {
-        return view('milestones.create', compact('grantproject'));
+        return view('milestones.create');
     }
 
     /**
@@ -30,13 +30,22 @@ class MilestoneController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'milestone_id' => 'required|string|unique:milestones',
             'name' => 'required|string|max:255',
             'target_completion_date' => 'required|string|max:255',
             'deliverable' => 'required|string',
             'status' => 'required|in:pending,in_progress,completed,delayed',
             'remark' => 'nullable|string'
+        ]);*/
+
+        $validated = $request->validate([
+            'project_id' => 'required|exists:grant_projects,id',
+            'name' => 'required',
+            'target_completion_date' => 'required|date',
+            'deliverable' => 'required',
+            'status' => 'required',
+            'remark' => 'nullable'
         ]);
 
         //$validated['project_id'] = $project->id;
@@ -69,13 +78,22 @@ class MilestoneController extends Controller
      */
     public function update(Request $request, Milestone $milestone)
     {
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'milestone_id' => 'required|string|unique:milestones',
             'name' => 'required|string|max:255',
             'target_completion_date' => 'required|string|max:255',
             'deliverable' => 'required|string',
             'status' => 'required|in:pending,in_progress,completed,delayed',
             'remark' => 'nullable|string'
+        ]);*/
+
+        $validated = $request->validate([
+            'project_id' => 'required|exists:grant_projects,id',
+            'name' => 'required',
+            'target_completion_date' => 'required|date',
+            'deliverable' => 'required',
+            'status' => 'required',
+            'remark' => 'nullable'
         ]);
 
         $validated['last_updated'] = now();

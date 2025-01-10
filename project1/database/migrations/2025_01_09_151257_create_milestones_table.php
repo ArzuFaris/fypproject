@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('milestones', function (Blueprint $table) {
             $table->id();
             $table->string('milestone_id')->unique();
-            $table->foreignId('grant_project_id')->constrained()->onDelete('cascade');;
+            $table->foreignId('project_id')->constrained('grant_projects')->onDelete('cascade');
             $table->string('name');
             $table->string('target_completion_date');
             $table->string('deliverable');
