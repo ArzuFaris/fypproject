@@ -31,6 +31,7 @@ class MilestoneController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'milestone_id' => 'required|string|unique:milestones',
             'name' => 'required|string|max:255',
             'target_completion_date' => 'required|string|max:255',
             'deliverable' => 'required|string',
@@ -69,6 +70,7 @@ class MilestoneController extends Controller
     public function update(Request $request, Milestone $milestone)
     {
         $validated = $request->validate([
+            'milestone_id' => 'required|string|unique:milestones',
             'name' => 'required|string|max:255',
             'target_completion_date' => 'required|string|max:255',
             'deliverable' => 'required|string',

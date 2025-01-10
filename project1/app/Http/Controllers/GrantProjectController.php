@@ -33,6 +33,7 @@ class GrantProjectController extends Controller
     {
         $validated = $request->validate([
             //'academician_id' => 'required',
+            'project_id' => 'required|string|unique:grantprojects',
             'title' => 'required|string|max:255',
             'grant_amount' => 'required|numeric|min:0',
             'grant_provider' => 'required|string|max:255',
@@ -71,6 +72,7 @@ class GrantProjectController extends Controller
     {
         $validated = $request->validate([
             //'academician_id' => 'required',
+            'project_id' => 'required|string|unique:grantprojects',
             'title' => 'required|string|max:255',
             'grant_amount' => 'required|numeric|min:0',
             'grant_provider' => 'required|string|max:255',

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('academicians', function (Blueprint $table) {
             $table->id();
+            $table->string('academician_id')->unique();
             $table->string('academician_name');
             $table->string('academician_number');
             $table->string('email');

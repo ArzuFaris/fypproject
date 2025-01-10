@@ -33,6 +33,7 @@ class AcademicianController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'academician_id' => 'required|string|unique:academicians',
             'academician_name' => 'required|string|max:255',
             'academician_number' => 'required|string|max:255',
             'email' => 'required|email|unique:academicians',
@@ -69,6 +70,7 @@ class AcademicianController extends Controller
     public function update(Request $request, Academician $academician)
     {
         $validated = $request->validate([
+            'academician_id' => 'required|string|unique:academicians',
             'academician_name' => 'required|string|max:255',
             'academician_number' => 'required|string|max:255'. $academician->id,
             'email' => 'required|email|unique:academicians,email,' . $academician->id,
