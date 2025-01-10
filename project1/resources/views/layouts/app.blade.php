@@ -1,109 +1,101 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>UGrant/title>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
-    <style type="text/css">
-        #hero{
-            background: linear-gradient(rgba(0,0,0,0.507), rgba(0,0,0,0.438)), url("Images/discussion.jpg");
-            background-position: center;
-            background-size: cover;
-        }
-    </style>
-
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGrant - @yield('title')</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
-    <div id="app">
+    <nav class="navbar navbar-expand-lg" style="background-color:orangered;">
+        <div class="container">
+            <a class="navbar-brand" style="color: white;" href="{{ url('/') }}">UGrant</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
 
-        <!--navbar-->
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <!--@auth
+                @if(Auth::user()->userCategory == 'Admin')
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="{{ route('students.index') }}">Students</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="{{ route('lecturers.index') }}">Lecturers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="{{ route('subjects.index') }}">Subjects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="{{ route('assessments.index') }}">Assessments</a>
+                    </li>
 
-                    </ul>
+                @elseif(Auth::user()->userCategory == 'Lecturer')
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
+                    <li class="nav-item">
+                                <a class="nav-link" style="color: white;" href="{{ route('subjects.index') }}">My Subjects</a>
                             </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: white;" href="{{ route('assessments.create') }}">Create Assessment</a>
+                            </li>
 
-        <!--hero-->
-        <section id="hero" class="min-vh-100 d-flex align-items-center text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <h1 class="text-uppercase text-white fw-semibold display-1">Welcome to UGrant</h1>
-                        <h5 class="text-white mt-3 mb-4">Your one stop project center</h5>
-                        <div>
-                            <a href="{{ route('login') }}" class="btn btn-brand me-2">Login</a>
-                            <a href="{{ route('register') }}" class="btn btn-light ms-2">Register</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                @elseif(Auth::user()->userCategory == 'Student')
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+                            <li class="nav-item">
+                                <a class="nav-link" style="color: white;" href="{{ route('subjects.index') }}">My Subjects</a>
+                            </li>
+
+                @endif
+                @endauth
+
+                @guest
+
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: white;" href="{{ route('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: white;" href="{{ route('register') }}">Register</a>
+                        </li>
+
+                @else
+                
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: white;" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+
+                @endguest-->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!--@if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif-->
+
+        @yield('content')
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<!-- Common form for displaying validation errors -->
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
