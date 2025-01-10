@@ -14,3 +14,6 @@ Route::resource('/academicians',\App\Http\Controllers\AcademicianController::cla
 Route::resource('/grantprojects',\App\Http\Controllers\GrantProjectController::class);
 Route::resource('/milestones',\App\Http\Controllers\MilestoneController::class);
 //Route::resource('/staffs',\App\Http\Controllers\StaffController::class);
+//Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
