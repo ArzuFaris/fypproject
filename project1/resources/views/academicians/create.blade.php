@@ -10,7 +10,7 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label class="form-label">ID</label>
+                    <label class="form-label">Staff ID</label>
                     <input type="text" name="academician_id" class="form-control @error('academician_id') is-invalid @enderror" value="{{ old('academician_id') }}" required>
                     @error('academician_id')
                         <div class="invalid-feedback">{{ $message }}</div>

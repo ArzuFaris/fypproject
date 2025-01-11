@@ -5,6 +5,20 @@
         <h2>Academicians</h2>
         <a href="{{ route('academicians.create') }}" class="btn btn-primary">Add New Academician</a>
     </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form action="{{ route('academicians.index') }}" method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="search" class="form-control" placeholder="Search by name, email, or department..." value="{{ request('search') }}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a href="{{ route('academicians.index') }}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <div class="card">
         <div class="card-body">

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('milestones', function (Blueprint $table) {
             $table->id();
             $table->string('milestone_id')->unique();
-            $table->foreignId('project_id')->constrained('grant_projects')->onDelete('cascade');
+            $table->string('project_id');
             $table->string('name');
             $table->string('target_completion_date');
             $table->string('deliverable');
@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('remark');
             $table->string('last_updated');
             $table->timestamps();
+
+            //$table->foreign('project_id')->references('project_id')->on('grant_projects')->onDelete('cascade');
         });
     }
 

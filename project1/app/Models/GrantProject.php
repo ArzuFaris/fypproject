@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class GrantProject extends Model
 {
-    protected $table = 'grant_projects';
-
+    protected $table = 'grant_projects';  // Specify the correct table name
     protected $primaryKey = 'project_id';
+    public $incrementing = false;  // Since project_id is a string
+    protected $keyType = 'string';
     
     protected $fillable = [
         'project_id',
@@ -27,7 +28,7 @@ class GrantProject extends Model
 
     public function milestones()
     {
-        return $this->hasMany(Milestone::class);
+        return $this->hasMany(Milestone::class,'project_id', 'project_id');
     }
 
     public function members()

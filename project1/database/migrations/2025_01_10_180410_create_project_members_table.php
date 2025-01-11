@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('academician_id')->constrained('academicians');
             $table->string('role');
             $table->timestamps();
+
+            $table->unique(['project_id', 'academician_id']);
         });
     }
 

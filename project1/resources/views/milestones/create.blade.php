@@ -17,9 +17,24 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                <!--<div class="mb-3">
                     <label class="form-label">Project ID</label>
                     <input type="text" name="project_id" class="form-control @error('project_id') is-invalid @enderror" value="{{ old('project_id') }}" required>
+                    @error('project_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>--> 
+
+                <div class="mb-3">
+                    <label class="form-label">Project</label>
+                    <select name="project_id" class="form-control @error('project_id') is-invalid @enderror" required>
+                        <option value="">Select Project</option>
+                        @foreach($projects as $project)
+                            <option value="{{ $project->project_id }}">
+                                {{ $project->title }}
+                            </option>
+                        @endforeach
+                    </select>
                     @error('project_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

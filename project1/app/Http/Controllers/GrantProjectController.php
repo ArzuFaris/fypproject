@@ -11,13 +11,21 @@ class GrantProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$grantprojects = Project::with(['leader', 'members'])->paginate(10);
-        $grantprojects = GrantProject::paginate(10);
-        //return view('grantprojects.index', compact('grantproject'));
-        //return view('grant-projects.index', compact('grantprojects'));
-        $projects = GrantProject::with('projectLeader')->get();
+        $query = GrantProject::query();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('project_id', 'like', "%{$search}%")
+                ->orWhere('project_title', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%")
+                ->orWhere('budget', 'like', "%{$search}%");
+            });
+        }
+
+        $grantprojects = $query->get();
         return view('grant-projects.index', compact('grantprojects'));
     }
 
@@ -37,7 +45,7 @@ class GrantProjectController extends Controller
     {
         $validated = $request->validate([
             'academician_id' => 'required',
-            'project_id' => 'required|string|unique:grantprojects',
+            'project_id' => 'required|string|unique:grant_projects',
             'title' => 'required|string|max:255',
             'grant_amount' => 'required|numeric|min:0',
             'grant_provider' => 'required|string|max:255',
@@ -77,7 +85,7 @@ class GrantProjectController extends Controller
     {
         $validated = $request->validate([
             'academician_id' => 'required',
-            'project_id' => 'required|string|unique:grantprojects',
+            'project_id' => 'required|string|unique:grant_projects',
             'title' => 'required|string|max:255',
             'grant_amount' => 'required|numeric|min:0',
             'grant_provider' => 'required|string|max:255',

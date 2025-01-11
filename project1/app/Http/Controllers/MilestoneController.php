@@ -11,9 +11,22 @@ class MilestoneController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $milestones = Milestone::latest()->orderby('target_completion_date')->paginate(10);
+        $query = Milestone::query();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('milestone_id', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('status', 'like', "%{$search}%")
+                  ->orWhere('deliverable', 'like', "%{$search}%")
+                  ->orWhere('project_id', 'like', "%{$search}%");
+            });
+        }
+
+        $milestones = $query->with('grantProject')->get();
         return view('milestones.index', compact('milestones'));
     }
 
@@ -22,7 +35,8 @@ class MilestoneController extends Controller
      */
     public function create()
     {
-        return view('milestones.create');
+        $projects = GrantProject::all();
+        return view('milestones.create', compact('projects'));
     }
 
     /**
@@ -40,6 +54,7 @@ class MilestoneController extends Controller
         ]);*/
 
         $validated = $request->validate([
+            'milestone_id' => 'required|string|unique:milestones',
             'project_id' => 'required|exists:grant_projects,id',
             'name' => 'required',
             'target_completion_date' => 'required|date',

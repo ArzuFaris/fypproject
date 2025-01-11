@@ -12,10 +12,23 @@ class AcademicianController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //$academicians = Academician::all();
-        $academicians = Academician::paginate(10);
+        //$academicians = Academician::paginate(10);
+        $query = Academician::query();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('academician_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('department', 'like', "%{$search}%")
+                  ->orWhere('college', 'like', "%{$search}%");
+            });
+        }
+
+        $academicians = $query->get();
         return view('academicians.index', compact('academicians'));
     }
 

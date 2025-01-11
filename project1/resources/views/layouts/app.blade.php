@@ -14,7 +14,7 @@
                 <ul class="navbar-nav">
 
                 <!--@auth
-                @if(Auth::user()->userCategory == 'Admin')
+                @if(Auth::user()->userCategory == 'Admin')-->
 
                     <li class="nav-item">
                         <a class="nav-link" style="color: white;" href="{{ route('students.index') }}">Students</a>
@@ -29,7 +29,7 @@
                         <a class="nav-link" style="color: white;" href="{{ route('assessments.index') }}">Assessments</a>
                     </li>
 
-                @elseif(Auth::user()->userCategory == 'Lecturer')
+                <!--@elseif(Auth::user()->userCategory == 'Lecturer')
 
                     <li class="nav-item">
                                 <a class="nav-link" style="color: white;" href="{{ route('subjects.index') }}">My Subjects</a>
