@@ -26,7 +26,7 @@ class GrantProjectController extends Controller
                 ->orWhere('budget', 'like', "%{$search}%");
             });
         }
-
+        
         $grantprojects = $query->get();
         return view('grant-projects.index', compact('grantprojects'));
     }
@@ -59,7 +59,7 @@ class GrantProjectController extends Controller
             'duration' => 'required|string|max:255',
         ]);
 
-        $grantProject = GrantProject::create($validated);
+        $project = GrantProject::create($validated);
         //$project->members()->attach($request->members);
 
         return redirect()->route('grant-projects.index')

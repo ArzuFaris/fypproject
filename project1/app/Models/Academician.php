@@ -20,6 +20,5 @@ class Academician extends Model
     public function grantprojects(){
         return $this->hasMany(GrantProject::class);
     }
-
 }
 

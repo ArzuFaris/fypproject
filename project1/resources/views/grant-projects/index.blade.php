@@ -1,12 +1,14 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Research Grant Projects</h2>
-        <a href="{{ route('grant-projects.create') }}" class="btn btn-primary">Add New Project</a>
+        @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
+            <a href="{{ route('grant-projects.create') }}" class="btn btn-primary">Add New Project</a>
+        @endif
     </div>
 
-    <!-- Add this after your header and before the table -->
     <div class="card mb-4">
         <div class="card-body">
             <form action="{{ route('grant-projects.index') }}" method="GET" class="row g-3">
@@ -49,13 +51,23 @@
                             <td>{{ $project->duration }} months</td>
                             <td>
                                 <div class="btn-group">
-                                    <a href="{{ route('grant-projects.show', $project) }}" class="btn btn-info btn-sm">View</a>
-                                    <a href="{{ route('grant-projects.edit', $project->project_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('grant-projects.destroy', $project->project_id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this project?')">Delete</button>
-                                    </form>
+                                    <!-- View button - accessible by all -->
+                                    <a href="{{ route('grant-projects.show', $project) }}" 
+                                       class="btn btn-info btn-sm">View</a>
+
+                                    <!-- Edit and Delete buttons - only for admin and staff -->
+                                    @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
+                                        <a href="{{ route('grant-projects.edit', $project->project_id) }}" 
+                                           class="btn btn-warning btn-sm">Edit</a>
+                                        <form action="{{ route('grant-projects.destroy', $project->project_id) }}" 
+                                              method="POST" 
+                                              class="d-inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this project?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

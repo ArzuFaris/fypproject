@@ -3,7 +3,9 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Milestones</h2>
-        <a href="{{ route('milestones.create') }}" class="btn btn-primary">Add New Milestones</a>
+        @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
+            <a href="{{ route('milestones.create') }}" class="btn btn-primary">Add New Milestone</a>
+        @endif
     </div>
 
     <div class="card mb-4">
@@ -50,13 +52,27 @@
                             <td>{{ $milestone->last_updated }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a href="{{ route('milestones.show', $milestone) }}" class="btn btn-info btn-sm">View</a>
-                                    <a href="{{ route('milestones.edit', $milestone) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('milestones.destroy', $milestone) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                                    </form>
+                                    <!-- View button - accessible by all -->
+                                    <a href="{{ route('milestones.show', $milestone) }}" 
+                                       class="btn btn-info btn-sm">View</a>
+
+                                    <!-- Edit button - accessible by admin, staff, and academician -->
+                                    @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
+                                        <a href="{{ route('milestones.edit', $milestone) }}" 
+                                           class="btn btn-warning btn-sm">Edit</a>
+                                    @endif
+
+                                    <!-- Delete button - only for admin and staff -->
+                                    @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
+                                        <form action="{{ route('milestones.destroy', $milestone) }}" 
+                                              method="POST" 
+                                              class="d-inline"
+                                              onsubmit="return confirm('Are you sure?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

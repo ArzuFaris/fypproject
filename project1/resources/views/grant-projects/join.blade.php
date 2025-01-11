@@ -12,8 +12,8 @@
     </div>
 
     <div class="form-group">
-        <label for="member_role">Role in Project</label>
-        <input type="text" name="member_role" id="member_role" class="form-control" required>
+        <label for="role">Role in Project</label>
+        <input type="text" name="role" id="role" class="form-control" required>
     </div>
 
     <button type="submit" class="btn btn-primary">Join Project</button>

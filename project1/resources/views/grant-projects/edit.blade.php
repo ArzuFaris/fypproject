@@ -58,7 +58,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Start Date</label>
-                    <input type="date" name="start_date" class="form-control @error('start_date') is-invalid @enderror" value="{{ old('start_date', $grantProject->start_date) }}" required>
+                    <input type="string" name="start_date" class="form-control @error('start_date') is-invalid @enderror" value="{{ old('start_date', $grantProject->start_date) }}" required>
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

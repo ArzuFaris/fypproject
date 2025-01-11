@@ -104,7 +104,9 @@
     </div>
 
     <div class="d-grid gap-2">
-        <a href="{{ route('grant-projects.edit', $grantProject) }}" class="btn btn-warning">Edit Project</a>
+        @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
+            <a href="{{ route('grant-projects.edit', $grantProject) }}" class="btn btn-warning">Edit Project</a>
+        @endif
         <a href="{{ route('grant-projects.index') }}" class="btn btn-secondary">Back to List</a>
     </div>
 </div>

@@ -47,7 +47,8 @@ class MilestonePolicy
     {
         return $user->role === 'admin' || 
                ($user->role === 'academician' && 
-                $milestone->grantProject->project_leader_id === $user->academician->academician_id);
+                $milestone->grantProject->project_leader_id === $user->academician->academician_id ||
+                $user->role === 'staff');
     }
 
     /**

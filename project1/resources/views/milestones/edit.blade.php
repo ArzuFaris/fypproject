@@ -52,7 +52,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">Status</label>
-                    <input type="text" name="status" class="form-control @error('status') is-invalid @enderror" value="{{ old('status', $milestone->status) }}" required>
+                    <select name="status" class="form-control @error('status') is-invalid @enderror" required>
+                        <option value="Not Started" {{ old('status', $milestone->status) === 'Not Started' ? 'selected' : '' }}>Not Started</option>
+                        <option value="In Progress" {{ old('status', $milestone->status) === 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="Completed" {{ old('status', $milestone->status) === 'Completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="Delayed" {{ old('status', $milestone->status) === 'Delayed' ? 'selected' : '' }}>Delayed</option>
+                    </select>
                     @error('status')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
