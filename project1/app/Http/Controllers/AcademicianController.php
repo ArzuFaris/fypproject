@@ -16,6 +16,9 @@ class AcademicianController extends Controller
     {
         //$academicians = Academician::all();
         //$academicians = Academician::paginate(10);
+
+        $this->authorize('viewAny', Academician::class);
+
         $query = Academician::query();
 
         if ($request->has('search')) {
@@ -37,6 +40,7 @@ class AcademicianController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Academician::class);
         return view('academicians.create');
     }
 
@@ -45,6 +49,8 @@ class AcademicianController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Academician::class);
+        
         $validated = $request->validate([
             'academician_id' => 'required|string|unique:academicians',
             'academician_name' => 'required|string|max:255',
@@ -66,6 +72,7 @@ class AcademicianController extends Controller
      */
     public function show(Academician $academician)
     {
+        $this->authorize('view', $academician);
         return view('academicians.show', compact('academician'));
     }
 
@@ -74,6 +81,7 @@ class AcademicianController extends Controller
      */
     public function edit(Academician $academician)
     {
+        $this->authorize('update', $academician);
         return view('academicians.edit', compact('academician'));
     }
 
@@ -82,6 +90,8 @@ class AcademicianController extends Controller
      */
     public function update(Request $request, Academician $academician)
     {
+        $this->authorize('update', $academician);
+        
         $validated = $request->validate([
             'academician_id' => 'required|string|unique:academicians',
             'academician_name' => 'required|string|max:255',
@@ -103,6 +113,8 @@ class AcademicianController extends Controller
      */
     public function destroy(Academician $academician)
     {
+        $this->authorize('delete', $academician);
+        
         $academician->delete();
         return redirect()->route('academicians.index')
             ->with('success', 'Academician deleted successfully');

@@ -15,6 +15,8 @@ class GrantProjectController extends Controller
     {
         $query = GrantProject::query();
 
+        $this->authorize('viewAny', GrantProject::class);
+
         if ($request->has('search')) {
             $search = $request->get('search');
             $query->where(function($q) use ($search) {
@@ -34,6 +36,8 @@ class GrantProjectController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', GrantProject::class);
+        
         $academicians = Academician::all();
         return view('grant-projects.create', compact('academicians'));
     }
@@ -43,6 +47,8 @@ class GrantProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', GrantProject::class);
+        
         $validated = $request->validate([
             'academician_id' => 'required',
             'project_id' => 'required|string|unique:grant_projects',
@@ -65,6 +71,8 @@ class GrantProjectController extends Controller
      */
     public function show(GrantProject $grantProject)
     {
+        $this->authorize('view', $grantProject);
+        
         //$grantProject->load('projectLeader', 'members', 'milestones');
         return view('grant-projects.show', compact('grantProject'));
     }
@@ -74,6 +82,8 @@ class GrantProjectController extends Controller
      */
     public function edit(GrantProject $grantProject)
     {
+        $this->authorize('update', $grantProject);
+        
         $academicians = Academician::all();
         return view('grant-projects.edit', compact('grantProject', 'academicians'));
     }
@@ -83,6 +93,8 @@ class GrantProjectController extends Controller
      */
     public function update(Request $request, GrantProject $grantProject)
     {
+        $this->authorize('update', $grantProject);
+        
         $validated = $request->validate([
             'academician_id' => 'required',
             'project_id' => 'required|string|unique:grant_projects',
@@ -105,8 +117,20 @@ class GrantProjectController extends Controller
      */
     public function destroy(GrantProject $grantProject)
     {
+        $this->authorize('delete', $grantProject);
+        
         $grantProject->delete();
         return redirect()->route('grant-projects.index')
             ->with('success', 'Grant project deleted successfully');
     }
+
+    /* Add method for project leaders to view their projects
+    public function myProjects()
+    {
+        $this->authorize('viewOwn', GrantProject::class);
+        
+        $projects = GrantProject::where('academician_id', auth()->user()->academician->academician_id)
+                              ->get();
+        return view('grant-projects.my-projects', compact('projects'));
+    }*/
 }

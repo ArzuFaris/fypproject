@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProjectMember;
-use App\Models\Grant_Project;
+use App\Models\GrantProject;
 use App\Models\Academician;
 use Illuminate\Http\Request;
 
@@ -42,7 +42,9 @@ class ProjectMemberController extends Controller
      */
     public function create()
     {
-        //
+        $projects = GrantProject::all();
+        $academicians = Academician::all();
+        return view('project-members.create', compact('projects', 'academicians'));
     }
 
     /**
@@ -53,27 +55,13 @@ class ProjectMemberController extends Controller
         $validated = $request->validate([
             'project_id' => 'required|exists:grant_projects,project_id',
             'academician_id' => 'required|exists:academicians,academician_id',
-            'member_role' => 'required|string'
+            'role' => 'required|string'
         ]);
-
-        // Check if member already exists in project
-        $existingMember = ProjectMember::where('project_id', $validated['project_id'])
-            ->where('academician_id', $validated['academician_id'])
-            ->first();
-
-        if ($existingMember) {
-            return response()->json([
-                'message' => 'Academician is already a member of this project'
-            ], 422);
-        }
-
-        // Create new project member
-        $projectMember = ProjectMember::create($validated);
-
-        return response()->json([
-            'message' => 'Successfully joined project',
-            'data' => $projectMember
-        ], 201);
+    
+        ProjectMember::create($validated);
+    
+        return redirect()->route('project-members.index')
+            ->with('success', 'Project member added successfully');
     }
 
     /**
@@ -106,5 +94,48 @@ class ProjectMemberController extends Controller
     public function destroy(ProjectMember $projectMember)
     {
         //
+    }
+
+    public function joinForm(Request $request)
+{
+    $query = GrantProject::query();
+
+    if ($request->has('search')) {
+        $search = $request->get('search');
+        $query->where(function($q) use ($search) {
+            $q->where('project_id', 'like', "%{$search}%")
+              ->orWhere('project_title', 'like', "%{$search}%");
+        });
+    }
+
+    $projects = $query->with(['projectLeader', 'members'])->get();
+    return view('project-members.join', compact('projects'));
+}
+
+    public function joinProject(Request $request)
+    {
+        $validated = $request->validate([
+            'project_id' => 'required|exists:grant_projects,project_id',
+            'academician_id' => 'required|exists:academicians,academician_id'
+        ]);
+
+        // Check if already a member
+        $existingMember = ProjectMember::where([
+            'project_id' => $validated['project_id'],
+            'academician_id' => $validated['academician_id']
+        ])->exists();
+
+        if ($existingMember) {
+            return back()->with('error', 'You are already a member of this project.');
+        }
+
+        // Create new project member with default role
+        ProjectMember::create([
+            'project_id' => $validated['project_id'],
+            'academician_id' => $validated['academician_id'],
+            'role' => 'Project Member'
+        ]);
+
+        return back()->with('success', 'Successfully joined the project!');
     }
 }

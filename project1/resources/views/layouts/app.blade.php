@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UGrant - @yield('title')</title>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @yield('styles')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg" style="background-color:orangered;">
         <div class="container">
-            <a class="navbar-brand" style="color: white;" href="{{ url('/') }}">UGrant</a>
+            <a class="navbar-brand" style="color: white;" href="{{ url('/') }}"><h1 style="font-weight: bold;">UGrant</h1></a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav">
 

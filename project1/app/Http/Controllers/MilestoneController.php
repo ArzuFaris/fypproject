@@ -13,6 +13,8 @@ class MilestoneController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Milestone::class);
+        
         $query = Milestone::query();
 
         if ($request->has('search')) {
@@ -35,6 +37,8 @@ class MilestoneController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Milestone::class);
+        
         $projects = GrantProject::all();
         return view('milestones.create', compact('projects'));
     }
@@ -52,6 +56,8 @@ class MilestoneController extends Controller
             'status' => 'required|in:pending,in_progress,completed,delayed',
             'remark' => 'nullable|string'
         ]);*/
+
+        $this->authorize('create', Milestone::class);
 
         $validated = $request->validate([
             'milestone_id' => 'required|string|unique:milestones',
@@ -77,6 +83,8 @@ class MilestoneController extends Controller
      */
     public function show(Milestone $milestone)
     {
+        $this->authorize('view', $milestone);
+
         return view('milestones.show', compact('milestone'));
     }
 
@@ -85,6 +93,8 @@ class MilestoneController extends Controller
      */
     public function edit(Milestone $milestone)
     {
+        $this->authorize('update', $milestone);
+
         return view('milestones.edit', compact('milestone'));
     }
 
@@ -101,6 +111,8 @@ class MilestoneController extends Controller
             'status' => 'required|in:pending,in_progress,completed,delayed',
             'remark' => 'nullable|string'
         ]);*/
+
+        $this->authorize('update', $milestone);
 
         $validated = $request->validate([
             'project_id' => 'required|exists:grant_projects,id',
@@ -124,6 +136,8 @@ class MilestoneController extends Controller
      */
     public function destroy(Milestone $milestone)
     {
+        $this->authorize('delete', $milestone);
+        
         $milestone->delete();
         return redirect()->route('milestones.index')
             ->with('success', 'Milestone deleted successfully');

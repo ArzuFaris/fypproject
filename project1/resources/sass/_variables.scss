@@ -5,3 +5,85 @@ $body-bg: #f8fafc;
 $font-family-sans-serif: 'Nunito', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
+
+/*Variable*/
+:root{
+    --c-dark: #212529;
+    --c-brand: #FF4600;
+    --c-brand-light: #FB7C4C;
+    --c-brand-rgb: 212, 135, 78;
+    --c-body: #727272;
+    --font-base: "ClashDisplay", sans-serif;
+    --box-shadow: 0px 15px 25px rgba(0,0,0,0.08);
+    --transition: all 0.5s ease;
+}
+
+/*reset & helpers*/
+body{
+    font-family: var(--font-base);
+    line-height: 1.7;
+    color: var(--c-body);
+    word-spacing: 1.5px;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6{
+    font-weight: 600;
+    color: var(--c-dark)
+}
+
+a{
+    text-decoration: none;
+    color: var(--c-brand);
+    transition: var(--transition);
+}
+
+a:hover{
+    color: var(--c-brand-light);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.section-padding{
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.theme-shadow{
+    box-shadow: var(--box-shadow);
+}
+
+p,
+label{
+    font-size: 15px;
+}
+
+.btn{
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 0;
+    padding: 10px 24px;
+}
+
+.btn-brand{
+    background-color: var(--c-brand);
+    border-color: var(--c-brand);
+    color: white;
+}
+
+.btn-brand:hover{
+    background-color: var(--c-brand-light);
+    border-color: var(--c-brand-light);
+    color: white;
+}
+
+.line{
+    width: 80px;
+    height: 4px;
+    background-color: var(--c-brand);
+    margin: 16px 0px 24px 0px;
+}
