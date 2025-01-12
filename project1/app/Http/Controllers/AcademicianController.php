@@ -99,7 +99,7 @@ class AcademicianController extends Controller
         $this->authorize('update', $academician);
         
         $validated = $request->validate([
-            'academician_id' => 'required|string|unique:academicians',
+            //'academician_id' => 'required|string|unique:academicians',
             'academician_name' => 'required|string|max:255',
             'academician_number' => 'required|string|max:255'. $academician->id,
             'email' => 'required|email|unique:academicians,email,' . $academician->id,

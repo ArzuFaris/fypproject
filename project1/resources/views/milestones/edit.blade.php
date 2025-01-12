@@ -12,7 +12,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">ID</label>
-                    <input type="text" name="milestone_id" class="form-control @error('milestone_id') is-invalid @enderror" value="{{ old('milestone_id', $milestone->milestone_id) }}" required>
+                    <input disabled type="text" name="milestone_id" class="form-control @error('milestone_id') is-invalid @enderror" value="{{ old('milestone_id', $milestone->milestone_id) }}" required>
                     @error('milestone_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -20,7 +20,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Project ID</label>
-                    <input type="text" name="project_id" class="form-control @error('project_id') is-invalid @enderror" value="{{ old('project_id', $milestone->project_id) }}" required>
+                    <input disabled type="text" name="project_id" class="form-control @error('project_id') is-invalid @enderror" value="{{ old('project_id', $milestone->project_id) }}" required>
                     @error('project_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -54,7 +54,7 @@
                     <label class="form-label">Status</label>
                     <select name="status" class="form-control @error('status') is-invalid @enderror" required>
                         <option value="Not Started" {{ old('status', $milestone->status) === 'Not Started' ? 'selected' : '' }}>Not Started</option>
-                        <option value="In Progress" {{ old('status', $milestone->status) === 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="Pending" {{ old('status', $milestone->status) === 'Pending' ? 'selected' : '' }}>Pending</option>
                         <option value="Completed" {{ old('status', $milestone->status) === 'Completed' ? 'selected' : '' }}>Completed</option>
                         <option value="Delayed" {{ old('status', $milestone->status) === 'Delayed' ? 'selected' : '' }}>Delayed</option>
                     </select>

@@ -12,7 +12,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Project ID</label>
-                    <input type="text" name="project_id" class="form-control @error('project_id') is-invalid @enderror" value="{{ old('project_id', $grantProject->project_id) }}" required>
+                    <input disabled type="text" name="project_id" class="form-control @error('project_id') is-invalid @enderror" value="{{ old('project_id', $grantProject->project_id) }}" required>
                     @error('title')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

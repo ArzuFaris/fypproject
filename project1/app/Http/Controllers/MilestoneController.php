@@ -115,7 +115,7 @@ class MilestoneController extends Controller
         $this->authorize('update', $milestone);
 
         $validated = $request->validate([
-            'project_id' => 'required|exists:grant_projects,id',
+            //'project_id' => 'required|exists:grant_projects,id',
             'name' => 'required',
             'target_completion_date' => 'required|date',
             'deliverable' => 'required',

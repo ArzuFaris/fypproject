@@ -99,7 +99,7 @@ class GrantProjectController extends Controller
         
         $validated = $request->validate([
             'academician_id' => 'required',
-            'project_id' => 'required|string|unique:grant_projects',
+            //'project_id' => 'required|string|unique:grant_projects',
             'title' => 'required|string|max:255',
             'grant_amount' => 'required|numeric|min:0',
             'grant_provider' => 'required|string|max:255',
