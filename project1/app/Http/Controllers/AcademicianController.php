@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Academician;
 use Illuminate\Http\Request;
-
+use App\Models\User;
 use function Ramsey\Uuid\v1;
 
 class AcademicianController extends Controller
@@ -12,11 +12,27 @@ class AcademicianController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //$academicians = Academician::all();
-        $academician = Academician::paginate(10);
-        return view('academicians.index', compact ('academicians'));
+        //$academicians = Academician::paginate(10);
+
+        $this->authorize('viewAny', Academician::class);
+
+        $query = Academician::query();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('academician_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('department', 'like', "%{$search}%")
+                  ->orWhere('college', 'like', "%{$search}%");
+            });
+        }
+
+        $academicians = $query->get();
+        return view('academicians.index', compact('academicians'));
     }
 
     /**
@@ -24,7 +40,13 @@ class AcademicianController extends Controller
      */
     public function create()
     {
-        return view('academician.create');
+        $this->authorize('create', Academician::class);
+
+        $users = User::whereDoesntHave('academician')
+            ->where('role', 'academician')
+            ->get();
+
+        return view('academicians.create', compact('users'));
     }
 
     /**
@@ -32,7 +54,11 @@ class AcademicianController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Academician::class);
+        
         $validated = $request->validate([
+            'academician_id' => 'required|string|unique:academicians',
+            'user_id' => 'required|exists:users,id|unique:academicians',
             'academician_name' => 'required|string|max:255',
             'academician_number' => 'required|string|max:255',
             'email' => 'required|email|unique:academicians',
@@ -52,6 +78,7 @@ class AcademicianController extends Controller
      */
     public function show(Academician $academician)
     {
+        $this->authorize('view', $academician);
         return view('academicians.show', compact('academician'));
     }
 
@@ -60,6 +87,7 @@ class AcademicianController extends Controller
      */
     public function edit(Academician $academician)
     {
+        $this->authorize('update', $academician);
         return view('academicians.edit', compact('academician'));
     }
 
@@ -68,7 +96,10 @@ class AcademicianController extends Controller
      */
     public function update(Request $request, Academician $academician)
     {
+        $this->authorize('update', $academician);
+        
         $validated = $request->validate([
+            //'academician_id' => 'required|string|unique:academicians',
             'academician_name' => 'required|string|max:255',
             'academician_number' => 'required|string|max:255'. $academician->id,
             'email' => 'required|email|unique:academicians,email,' . $academician->id,
@@ -88,6 +119,8 @@ class AcademicianController extends Controller
      */
     public function destroy(Academician $academician)
     {
+        $this->authorize('delete', $academician);
+        
         $academician->delete();
         return redirect()->route('academicians.index')
             ->with('success', 'Academician deleted successfully');

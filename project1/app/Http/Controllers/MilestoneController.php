@@ -5,16 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Milestone;
 use App\Models\GrantProject;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class MilestoneController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $milestones = Milestone::latest()->orderby('target_completion_date')->paginate(10);
-        return view('milestones.index', compact('project', 'milestones'));
+        $this->authorize('viewAny', Milestone::class);
+        
+        $query = Milestone::query();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('milestone_id', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('status', 'like', "%{$search}%")
+                  ->orWhere('deliverable', 'like', "%{$search}%")
+                  ->orWhere('project_id', 'like', "%{$search}%");
+            });
+        }
+
+        $milestones = $query->with('grantProject')->get();
+        return view('milestones.index', compact('milestones'));
     }
 
     /**
@@ -22,7 +37,10 @@ class MilestoneController extends Controller
      */
     public function create()
     {
-        return view('milestones.create', compact('grantproject'));
+        $this->authorize('create', Milestone::class);
+        
+        $projects = GrantProject::all();
+        return view('milestones.create', compact('projects'));
     }
 
     /**
@@ -30,12 +48,25 @@ class MilestoneController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        /*$validated = $request->validate([
+            'milestone_id' => 'required|string|unique:milestones',
             'name' => 'required|string|max:255',
             'target_completion_date' => 'required|string|max:255',
             'deliverable' => 'required|string',
             'status' => 'required|in:pending,in_progress,completed,delayed',
             'remark' => 'nullable|string'
+        ]);*/
+
+        $this->authorize('create', Milestone::class);
+
+        $validated = $request->validate([
+            'milestone_id' => 'required|string|unique:milestones',
+            'project_id' => 'required|exists:grant_projects,id',
+            'name' => 'required',
+            'target_completion_date' => 'required|date',
+            'deliverable' => 'required',
+            'status' => 'required',
+            'remark' => 'nullable'
         ]);
 
         //$validated['project_id'] = $project->id;
@@ -52,6 +83,8 @@ class MilestoneController extends Controller
      */
     public function show(Milestone $milestone)
     {
+        $this->authorize('view', $milestone);
+
         return view('milestones.show', compact('milestone'));
     }
 
@@ -60,6 +93,8 @@ class MilestoneController extends Controller
      */
     public function edit(Milestone $milestone)
     {
+        $this->authorize('update', $milestone);
+
         return view('milestones.edit', compact('milestone'));
     }
 
@@ -68,12 +103,24 @@ class MilestoneController extends Controller
      */
     public function update(Request $request, Milestone $milestone)
     {
-        $validated = $request->validate([
+        /*$validated = $request->validate([
+            'milestone_id' => 'required|string|unique:milestones',
             'name' => 'required|string|max:255',
             'target_completion_date' => 'required|string|max:255',
             'deliverable' => 'required|string',
             'status' => 'required|in:pending,in_progress,completed,delayed',
             'remark' => 'nullable|string'
+        ]);*/
+
+        $this->authorize('update', $milestone);
+
+        $validated = $request->validate([
+            //'project_id' => 'required|exists:grant_projects,id',
+            'name' => 'required',
+            'target_completion_date' => 'required|date',
+            'deliverable' => 'required',
+            'status' => 'required',
+            'remark' => 'nullable'
         ]);
 
         $validated['last_updated'] = now();
@@ -89,6 +136,8 @@ class MilestoneController extends Controller
      */
     public function destroy(Milestone $milestone)
     {
+        $this->authorize('delete', $milestone);
+        
         $milestone->delete();
         return redirect()->route('milestones.index')
             ->with('success', 'Milestone deleted successfully');

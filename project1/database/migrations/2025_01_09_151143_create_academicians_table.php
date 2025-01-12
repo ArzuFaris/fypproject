@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('academicians', function (Blueprint $table) {
             $table->id();
+            $table->string('academician_id')->unique();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('academician_name');
             $table->string('academician_number');
             $table->string('email');
@@ -20,6 +22,8 @@ return new class extends Migration
             $table->string('department');
             $table->string('position');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
