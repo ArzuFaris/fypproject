@@ -23,10 +23,10 @@ class GrantProjectController extends Controller
             $search = $request->get('search');
             $query->where(function($q) use ($search) {
                 $q->where('project_id', 'like', "%{$search}%")
-                ->orWhere('project_title', 'like', "%{$search}%")
-                ->orWhere('status', 'like', "%{$search}%")
-                ->orWhere('budget', 'like', "%{$search}%");
-            });
+                ->orWhere('title', 'like', "%{$search}%")
+                ->orWhere('grant_provider', 'like', "%{$search}%")
+                ->orWhere('grant_amount', 'like', "%{$search}%");
+        });
         }
         
         $grantprojects = $query->get();

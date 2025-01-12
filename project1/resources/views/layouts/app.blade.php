@@ -145,7 +145,7 @@
                         <div class="card text-white" style="background-color:orange;">
                             <div class="card-body">
                                 <h5 class="card-title">Total Academicians</h5>
-                                <p class="card-text display-4">{{ App\Models\Academician::count() }}</p>
+                                <p class="card-text display-4">{{ App\Models\User::where('role', 'academician')->count() }}</p>
                             </div>
                         </div>
                     </div>
