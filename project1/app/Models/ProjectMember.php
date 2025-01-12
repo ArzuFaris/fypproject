@@ -11,7 +11,7 @@ class ProjectMember extends Model
     protected $primaryKey = 'project_member_id';    
 
     protected $fillable = [
-        'project_member_id',
+        //'project_member_id',
         'project_id',
         'academician_id',
         'role'

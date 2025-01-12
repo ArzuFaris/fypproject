@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Academician;
 use Illuminate\Http\Request;
-
+use App\Models\User;
 use function Ramsey\Uuid\v1;
 
 class AcademicianController extends Controller
@@ -41,7 +41,12 @@ class AcademicianController extends Controller
     public function create()
     {
         $this->authorize('create', Academician::class);
-        return view('academicians.create');
+
+        $users = User::whereDoesntHave('academician')
+            ->where('role', 'academician')
+            ->get();
+
+        return view('academicians.create', compact('users'));
     }
 
     /**
@@ -53,6 +58,7 @@ class AcademicianController extends Controller
         
         $validated = $request->validate([
             'academician_id' => 'required|string|unique:academicians',
+            'user_id' => 'required|exists:users,id|unique:academicians',
             'academician_name' => 'required|string|max:255',
             'academician_number' => 'required|string|max:255',
             'email' => 'required|email|unique:academicians',

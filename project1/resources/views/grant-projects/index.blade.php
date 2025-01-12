@@ -55,6 +55,23 @@
                                     <a href="{{ route('grant-projects.show', $project) }}" 
                                        class="btn btn-info btn-sm">View</a>
 
+                                        @if(Auth::user()->role === 'academician' && Auth::user()->academician)
+                                            @php
+                                                $isProjectMember = $project->members->contains('academician_id', Auth::user()->academician->academician_id);
+                                            @endphp
+                                            
+                                            @if(!$isProjectMember)
+                                                <form action="{{ route('grant-projects.join', $project->project_id) }}" 
+                                                    method="POST" 
+                                                    class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary btn-sm">Join</button>
+                                                </form>
+                                            @else
+                                                <button disabled class="bg-success" style="color: white;">Member</button>
+                                            @endif
+                                        @endif
+
                                     <!-- Edit and Delete buttons - only for admin and staff -->
                                     @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
                                         <a href="{{ route('grant-projects.edit', $project->project_id) }}" 

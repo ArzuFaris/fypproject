@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\GrantProject;
 use App\Models\Academician;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ProjectMember;
 
 class GrantProjectController extends Controller
 {
@@ -133,4 +135,27 @@ class GrantProjectController extends Controller
                               ->get();
         return view('grant-projects.my-projects', compact('projects'));
     }*/
+
+    public function joinProject(GrantProject $project)
+{
+    $user = Auth::user();
+    
+    if (!$user->academician) {
+        return back()->with('error', 'Academician profile not found.');
+    }
+
+    // Check if already a member
+    if ($project->members->contains('academician_id', $user->academician->academician_id)) {
+        return back()->with('error', 'You are already a member of this project.');
+    }
+
+    // Add as member
+    ProjectMember::create([
+        'project_id' => $project->project_id,
+        'academician_id' => $user->academician->academician_id,
+        'role' => 'member'
+    ]);
+
+    return back()->with('success', 'Successfully joined the project.');
+}
 }

@@ -8,6 +8,7 @@ class Academician extends Model
 {
     protected $fillable = [
         'academician_id',
+        'user_id',
         'academician_name',
         'academician_number',
         'email',
@@ -17,8 +18,14 @@ class Academician extends Model
     ];
 
     
-    public function grantprojects(){
-        return $this->hasMany(GrantProject::class);
+    public function ledProjects()
+    {
+        return $this->hasMany(GrantProject::class, 'academician_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
 

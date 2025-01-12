@@ -32,4 +32,8 @@ Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, '
 Route::get('/join-project', [ProjectMemberController::class, 'joinForm'])->name('join.project');
 Route::post('/join-project', [ProjectMemberController::class, 'joinProject'])->name('join.project.store');
 
+Route::post('grant-projects/{project}/join', [GrantProjectController::class, 'joinProject'])
+    ->name('grant-projects.join')
+    ->middleware(['auth']);
+
 //Auth::routes();

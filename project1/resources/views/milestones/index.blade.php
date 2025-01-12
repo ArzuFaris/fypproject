@@ -3,7 +3,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Milestones</h2>
-        @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff')
+        @if(Auth::user()->role === 'admin' || Auth::user()->role === 'staff' || Auth::user()->role === 'academician')
             <a href="{{ route('milestones.create') }}" class="btn btn-primary">Add New Milestone</a>
         @endif
     </div>

@@ -30,8 +30,8 @@
                     <select name="academician_id" class="form-control @error('academician_id') is-invalid @enderror" required>
                         <option value="">Select Project Leader</option>
                         @foreach($academicians as $academician)
-                            <option value="{{ $academician->id }}" {{ old('academician_id') == $academician->id ? 'selected' : '' }}>
-                                {{ $academician->academician_name }} ({{ $academician->academician_number }})
+                            <option value="{{ $academician->academician_id }}" {{ old('academician_id') == $academician->academician_id ? 'selected' : '' }}>
+                                {{ $academician->academician_name }} - {{ $academician->department }} ({{ $academician->academician_number }})
                             </option>
                         @endforeach
                     </select>

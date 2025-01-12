@@ -18,6 +18,21 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">Select User</label>
+                    <select name="user_id" class="form-control @error('user_id') is-invalid @enderror" required>
+                        <option value="">Select a User</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                {{ $user->name }} ({{ $user->email }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('user_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Name</label>
                     <input type="text" name="academician_name" class="form-control @error('academician_name') is-invalid @enderror" value="{{ old('academician_name') }}" required>
                     @error('academician_name')
